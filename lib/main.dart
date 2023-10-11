@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/expense_data.dart';
 
 void main() async {
   //initialize hive
   WidgetsFlutterBinding.ensureInitialized();
-
+  SharedPreferences prefs = await SharedPreferences.getInstance();
   final appDocumentDirectory = await getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   // open hive box
   await Hive.openBox("expense_database");
-  runApp(const MyApp());
+  runApp( MyApp(prefs));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp(SharedPreferences prefs, {Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
